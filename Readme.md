@@ -1,0 +1,1 @@
+tetris executable from the command line accessible anywhere on ubuntu?
