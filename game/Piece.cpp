@@ -21,52 +21,74 @@ void Piece::Move(int dx, int dy){
 
 void Piece::Rotate(){
     rotation_ = (rotation_ + 1) % 4;
-    // TODO: Implement shape rotation logic
+    current_shape_ = GetShapeForRotation(type_, rotation_);
 }
 
 void Piece::InitializeShape(){
-    switch (type_)
-    {
-    case PieceType::I:
-        current_shape_ = {
-            {1, 1, 1, 1}
-        };
-        break;
-    case PieceType::O:
-        current_shape_ = {
-            {1, 1},
-            {1, 1}
-        };
-        break;
-    case PieceType::T:
-        current_shape_ = {
-            {0, 1, 0},
-            {1, 1, 1}
-        };
-        break;
-    case PieceType::S:
-        current_shape_ = {
-            {0, 1, 1},
-            {1, 1, 0}
-        };
-        break;
-    case PieceType::Z:
-        current_shape_ = {
-            {1, 1, 0},
-            {0, 1, 1}
-        };
-        break;
-    case PieceType::J:
-        current_shape_ = {
-            {1, 0, 0},
-            {1, 1, 1}
-        };
-        break;
-    case PieceType::L:
-        current_shape_ = {
-            {0, 0, 1},
-            {1, 1, 1}
-        };
-        break;
+    current_shape_ = GetShapeForRotation(type_, rotation_);
+}
+
+Shape Piece::GetShapeForRotation(PieceType type, int rotation) {
+    switch (type) {
+        case PieceType::I:
+            switch (rotation) {
+                case 0: return {{1, 1, 1, 1}};
+                case 1: return {{1}, {1}, {1}, {1}};
+                case 2: return {{1, 1, 1, 1}};
+                case 3: return {{1}, {1}, {1}, {1}};
+            }
+            break;
+            
+        case PieceType::O:
+            // O piece doesn't rotate
+            return {{1, 1}, {1, 1}};
+            
+        case PieceType::T:
+            switch (rotation) {
+                case 0: return {{0, 1, 0}, {1, 1, 1}};
+                case 1: return {{1, 0}, {1, 1}, {1, 0}};
+                case 2: return {{1, 1, 1}, {0, 1, 0}};
+                case 3: return {{0, 1}, {1, 1}, {0, 1}};
+            }
+            break;
+            
+        case PieceType::S:
+            switch (rotation) {
+                case 0: return {{0, 1, 1}, {1, 1, 0}};
+                case 1: return {{1, 0}, {1, 1}, {0, 1}};
+                case 2: return {{0, 1, 1}, {1, 1, 0}};
+                case 3: return {{1, 0}, {1, 1}, {0, 1}};
+            }
+            break;
+            
+        case PieceType::Z:
+            switch (rotation) {
+                case 0: return {{1, 1, 0}, {0, 1, 1}};
+                case 1: return {{0, 1}, {1, 1}, {1, 0}};
+                case 2: return {{1, 1, 0}, {0, 1, 1}};
+                case 3: return {{0, 1}, {1, 1}, {1, 0}};
+            }
+            break;
+            
+        case PieceType::J:
+            switch (rotation) {
+                case 0: return {{1, 0, 0}, {1, 1, 1}};
+                case 1: return {{1, 1}, {1, 0}, {1, 0}};
+                case 2: return {{1, 1, 1}, {0, 0, 1}};
+                case 3: return {{0, 1}, {0, 1}, {1, 1}};
+            }
+            break;
+            
+        case PieceType::L:
+            switch (rotation) {
+                case 0: return {{0, 0, 1}, {1, 1, 1}};
+                case 1: return {{1, 0}, {1, 0}, {1, 1}};
+                case 2: return {{1, 1, 1}, {1, 0, 0}};
+                case 3: return {{1, 1}, {0, 1}, {0, 1}};
+            }
+            break;
     }
+    
+    // Fallback - should never reach here
+    return {{1}};
 }

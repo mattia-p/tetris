@@ -32,6 +32,7 @@ public:
     void SetPosition(int x, int y);
     void Move(int dx, int dy);
     void Rotate();
+    Shape GetShapeForRotation(PieceType type, int rotation);
 
 private:
     int x_;

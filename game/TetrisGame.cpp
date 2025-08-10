@@ -152,12 +152,12 @@ void TetrisGame::HandleInput(GameInput input){
         }
         break;
 
-    // case GameInput::Rotate: // Usually rotate clockwise
-    //     movedPiece.RotateClockwise();
-    //     if (IsValidPosition(movedPiece)) {
-    //         current_piece_ = movedPiece;
-    //     }
-    //     break;
+    case GameInput::Rotate: // Usually rotate clockwise
+        movedPiece.Rotate();
+        if (IsValidPosition(movedPiece)) {
+            current_piece_ = movedPiece;
+        }
+        break;
 
     case GameInput::SoftDrop: // Soft drop
         movedPiece.Move(0, 1);

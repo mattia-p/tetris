@@ -14,6 +14,7 @@ public:
     TetrisGame::GameInput GetInput();
     void Draw(const TetrisGame& game);
     void DrawBorder(int width, int height);
+    void DrawGameOver(const TetrisGame& game);
 
 private:
 

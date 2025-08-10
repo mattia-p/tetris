@@ -4,19 +4,16 @@
 #include "TetrisGame.hpp"
 
 NcursesDisplay::NcursesDisplay(){
-    // std::cout << "NcursesDisplay: Constructor" << std::endl;
     initscr();            // Initialize ncurses
     cbreak();             // Disable line buffering
     noecho();             // Don't echo keypresses
     keypad(stdscr, TRUE); // Enable function keys and arrows
     nodelay(stdscr, TRUE); // Make getch blocking, or set TRUE for non-blocking
     curs_set(0);          // Hide the cursor 
-    // box(stdscr, 0, 0);  // 0 uses default ACS characters
 }
 
 NcursesDisplay::~NcursesDisplay(){
     endwin();
-    // std::cout << "NcursesDisplay: Destructor" << std::endl;
 }
 
 void NcursesDisplay::DrawBorder(int width, int height) {
@@ -41,15 +38,44 @@ void NcursesDisplay::DrawBorder(int width, int height) {
     mvprintw(height * 2 + 1, width * 2 + 1, "+");
 }
 
+void NcursesDisplay::DrawGameOver(const TetrisGame& game){
+    clear();
+    DrawBorder(game.getBoard().GetWidth(), game.getBoard().GetHeight());
+    
+    // Calculate center position accounting for border and 2x scaling
+    int centerY = game.getBoard().GetHeight();  // Middle row
+    int centerX = game.getBoard().GetWidth();   // Middle column
+    
+    // Draw "GAME OVER" text in the center (accounting for border offset)
+    const char* gameOverText = "GAME OVER";
+    int textLength = 9; // Length of "GAME OVER"
+    int textX = centerX - textLength / 2 + 1;  // +1 for border offset
+    
+    mvprintw(centerY + 1, textX, gameOverText);
+    
+    // Draw "Press any key to exit" below
+    const char* exitText = "Press any key to exit";
+    int exitLength = 21; // Length of "Press any key to exit"
+    int exitX = centerX - exitLength / 2 + 1;  // +1 for border offset
+    
+    mvprintw(centerY + 2, exitX, exitText);
+    
+    refresh();
+    
+    // Make getch blocking to wait for user input
+    nodelay(stdscr, FALSE);
+    getch();
+    nodelay(stdscr, TRUE);  // Restore non-blocking mode
+}
+
 
 TetrisGame::GameInput NcursesDisplay::GetInput(){
     int ch = getch();
     switch (ch) {
         case KEY_LEFT:  return TetrisGame::GameInput::MoveLeft;
         case KEY_RIGHT: return TetrisGame::GameInput::MoveRight;
-        case KEY_UP:    return TetrisGame::GameInput::Rotate;
+        case ' ':    return TetrisGame::GameInput::Rotate;
         case KEY_DOWN:  return TetrisGame::GameInput::SoftDrop;
-        case ' ':       return TetrisGame::GameInput::HardDrop;
         case 'q':       return TetrisGame::GameInput::Quit;
         default:        return TetrisGame::GameInput::None;
     }
