@@ -11,8 +11,9 @@ public:
     NcursesDisplay();
     ~NcursesDisplay();
 
-    int GetInput();
+    TetrisGame::GameInput GetInput();
     void Draw(const TetrisGame& game);
+    void DrawBorder(int width, int height);
 
 private:
 

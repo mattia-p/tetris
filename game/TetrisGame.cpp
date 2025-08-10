@@ -11,8 +11,21 @@ TetrisGame::TetrisGame()
       current_piece_(PieceType::I),
       next_piece_(PieceType::S)
 {
-    // std::cout << "TetrisGame: Constructor" << std::endl;
-    SpawnNewPiece();
+    // Initialize random seed first
+    static bool seeded = false;
+    if (!seeded) {
+        std::srand(std::time(nullptr));
+        seeded = true;
+    }
+    
+    // Now create random pieces
+    current_piece_ = Piece(GetRandomPieceType());
+    next_piece_ = Piece(GetRandomPieceType());
+    
+    // Position the first piece
+    int startX = board_.GetWidth() / 2 - 1;
+    int startY = 0;
+    current_piece_.SetPosition(startX, startY);
 }
 
 TetrisGame::~TetrisGame(){
@@ -118,3 +131,51 @@ const Piece& TetrisGame::GetCurrentPiece() const {
 const Piece& TetrisGame::GetNextPiece() const {
     return next_piece_;
 }
+
+void TetrisGame::HandleInput(GameInput input){
+
+    Piece movedPiece = current_piece_;
+
+    switch (input)
+    {
+    case GameInput::MoveLeft:
+        movedPiece.Move(-1,0);
+        if(IsValidPosition(movedPiece)){
+            current_piece_ = movedPiece;
+        }
+        break;
+    
+        case GameInput::MoveRight:
+        movedPiece.Move(1, 0);
+        if (IsValidPosition(movedPiece)) {
+            current_piece_ = movedPiece;
+        }
+        break;
+
+    // case GameInput::Rotate: // Usually rotate clockwise
+    //     movedPiece.RotateClockwise();
+    //     if (IsValidPosition(movedPiece)) {
+    //         current_piece_ = movedPiece;
+    //     }
+    //     break;
+
+    case GameInput::SoftDrop: // Soft drop
+        movedPiece.Move(0, 1);
+        if (IsValidPosition(movedPiece)) {
+            current_piece_ = movedPiece;
+        }
+        break;
+
+    // case ' ': // Space for hard drop
+    //     while (IsValidPosition(movedPiece)) {
+    //         current_piece_ = movedPiece;
+    //         movedPiece.Move(0, 1);
+    //     }
+    //     // Piece can't move further down, so lock it immediately
+    //     board_.PlacePiece(current_piece_);
+    //     board_.ClearLines();
+    //     SpawnNewPiece();
+    //     break;
+    }
+}
+

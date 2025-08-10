@@ -19,6 +19,20 @@ public:
     const Piece& GetCurrentPiece() const;
     const Piece& GetNextPiece() const;
 
+    enum class GameInput {
+        MoveLeft,
+        MoveRight,
+        Rotate,
+        SoftDrop,
+        HardDrop,
+        Quit,
+        None
+    };
+
+    void HandleInput(GameInput input);
+
+    
+
 private:
     bool game_over_;
     int level_;
