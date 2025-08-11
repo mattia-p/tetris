@@ -24,19 +24,20 @@ void NcursesDisplay::DrawBorder(int width, int height) {
     }
     mvprintw(0, width * 2 + 1, "+");
     
-    // Draw side borders
-    for (int y = 1; y < height * 2 + 1; ++y) {
+    // Draw side borders  
+    for (int y = 1; y <= height; ++y) {
         mvprintw(y, 0, "|");                        // Left wall
         mvprintw(y, width * 2 + 1, "|");            // Right wall
     }
     
     // Draw bottom border
-    mvprintw(height * 2 + 1, 0, "+");
+    mvprintw(height + 1, 0, "+");
     for (int x = 1; x <= width * 2; ++x) {
-        mvprintw(height * 2 + 1, x, "-");
+        mvprintw(height + 1, x, "-");
     }
-    mvprintw(height * 2 + 1, width * 2 + 1, "+");
+    mvprintw(height + 1, width * 2 + 1, "+");
 }
+
 
 void NcursesDisplay::DrawGameOver(const TetrisGame& game){
     clear();
@@ -50,8 +51,9 @@ void NcursesDisplay::DrawGameOver(const TetrisGame& game){
     const char* gameOverText = "GAME OVER";
     int textLength = 9; // Length of "GAME OVER"
     int textX = centerX - textLength / 2 + 1;  // +1 for border offset
+    int testY = centerY / 2;
     
-    mvprintw(centerY + 1, textX, gameOverText);
+    mvprintw(testY, textX, gameOverText);
     
     // Draw "Press any key to exit" below
     const char* exitText = "Press any key to exit";
@@ -96,10 +98,10 @@ void NcursesDisplay::Draw(const TetrisGame& game) {
         for (int x = 0; x < board.GetWidth(); ++x) {
             if (board.GetCell(x, y) != 0) {
                 // Draw locked piece
-                mvprintw(y*2 + 1, x*2 + 1, "# ");
+                mvprintw(y + 1, x*2 + 1, "# ");
             } else {
                 // Draw empty cell
-                mvprintw(y*2 + 1, x*2 + 1, ". ");
+                mvprintw(y + 1, x*2 + 1, "  ");
             }
         }
     }
@@ -115,7 +117,7 @@ void NcursesDisplay::Draw(const TetrisGame& game) {
                 int drawX = px + j;
                 if (drawY >= 0 && drawY < board.GetHeight() && drawX >= 0 && drawX < board.GetWidth()) {
                     // Draw current piece cell at (drawY, drawX)
-                    mvprintw(drawY * 2 + 1, drawX * 2 + 1, "* ");
+                    mvprintw(drawY + 1, drawX * 2 + 1, "* ");
                 }
             }
         }

@@ -4,9 +4,6 @@
 #include <vector>
 #include "Piece.hpp"
 
-const int WIDTH = 10;
-const int HEIGHT = 15;
-
 class Board{
 
 public:
